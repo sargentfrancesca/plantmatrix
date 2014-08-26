@@ -20,7 +20,7 @@
 
 //Connect to MySQL
 
-$connect = mysql_connect("localhost","root","");
+$connect = mysql_connect("localhost","root","new_password");
 
 $mapa = "SELECT * FROM plantMatrix.coordsTest WHERE plantMatrix.coordsTest.LatitudeDec != 'NA'";
 
