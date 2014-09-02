@@ -27,7 +27,7 @@ body {
 
 $connect = mysql_connect("localhost","root","");
 
-$mapa = "SELECT * FROM plantMatrix.coordsTest WHERE plantMatrix.coordsTest.LongitudeDec && LatitudeDec != 'NA' GROUP BY SpeciesAccepted";
+$mapa = "SELECT * FROM plantMatrix.coordsTest WHERE plantMatrix.coordsTest.LongitudeDec != 'NA' && LatitudeDec != 'NA' GROUP BY SpeciesAccepted";
 
 $dbquery = mysql_query($mapa,$connect);
 
