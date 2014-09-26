@@ -1,121 +1,11 @@
 <html>
-<head><title>GeoJSON</title>
+<head><title>Life Cycle</title>
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
+<link href="style.css" rel='stylesheet'/>
 <link href="ico.css" rel='stylesheet'/>
 
-<style type="text/css">
-
-body {
-  font-family: Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-#toolbar {
-  height: 3%;
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  background: #2c3e50;
-  -webkit-box-shadow: 4px 3px 0px 0px rgba(52, 73, 94,0.75);
-  -moz-box-shadow:    4px 3px 0px 0px rgba(52, 73, 94,0.75);
-  box-shadow:         4px 3px 0px 0px rgba(52, 73, 94,0.75);
-}
-
-#toolbar ul {
-  color: #fff;
-  padding: 0.6em;
-  margin: 0;
-  text-align: right;
-}
-
-#toolbar ul li {
-  list-style: none;
-  display: inline;
-  margin: 0 1em 0 0;
-}
-
-#toolbar ul li a {
-  font-style: normal;
-  text-decoration: none;
-  color: #fff;
-}
-
-#toolbar ul li a:hover {
-  text-decoration: underline;
-}
-
-#toolbar span {
-  margin: 0 0.3em 0 0;
-}
-
-#map {
-	width: 100%;
-	height: 100%;
-
-}
-
-.custom-popup .leaflet-popup-content-wrapper {
-  background:#95a5a6;
-  color:#fff;
-  font-size:1em;
-  line-height:24px;
-  font-weight: normal;
-  text-decoration: none;
-  font-style: normal;
-}
-
-.custom-popup .leaflet-popup-content-wrapper a {
-  color:rgba(255,255,255,0.5);
-}
-
-.custom-popup .leaflet-popup-tip-container {
-  width:30px;
-  height:15px;
-}
-
-.custom-popup .leaflet-popup-tip {
-  border-left:15px solid transparent;
-  border-right:15px solid transparent;
-  border-top:15px solid #95a5a6;
-}
-
-.info {
-  position: absolute;
-  top: 10%;
-  left: 1%;
-}
-
-.graph {
-  width:100px;
-  height: 100px;
-  margin-top: 2em;
-  overflow: hidden;
-  background: transparent;
-  box-shadow: none;
-  float:left;
-}
-
-.info .graph img {
-  width: 300px;
-  position: absolute;
-  display: block;
-  clip: rect(0px,100px,100px,0px);
-}
-
-.info div {
-  background:#95a5a6;
-  padding: 1em;
-  border-radius: 0.8m;
-  color: #fff;
-  box-shadow: 0.1em 0.1em 0 #95a5a6;
-}
-
-
-
-
-</style>
 </head>
 
 <body>
@@ -123,17 +13,16 @@ body {
 <?php
 
 //Connect to MySQL
-
 $connect = mysql_connect("localhost","root","your_password");
 
 $mapa = "SELECT * FROM plantMatrix.coordsTest WHERE plantMatrix.coordsTest.LatitudeDec != 'NA' && LongitudeDec !='NA' && SpeciesAccepted !='NA' GROUP BY SpeciesAccepted";
 
 $dbquery = mysql_query($mapa,$connect);
 
+
 //Creating GeoJSON array, ready to store values in GeoJSON format 
 //GeoJSON format reference - http://geojson.org/
 $geojson = array( 'type' => 'FeatureCollection', 'features' => array());
-
 
   while($row = mysql_fetch_assoc($dbquery)){
 
@@ -142,6 +31,11 @@ $geojson = array( 'type' => 'FeatureCollection', 'features' => array());
       'properties' => array(
         'title' => '<em>'.$row['SpeciesAccepted'].'</em><br>'.$row['Population'],
           'database' => array(
+          'authors' => $row['Authors'],
+          'doiisbn' => $row['DOIISBN'],
+          'additionalsource' => $row['AdditionalSource'],
+          'yearpublication' => $row['YearPublication'],
+          'ecoregion' => $row['Ecoregion'],
           'title' => $row['SpeciesAccepted'],
           'speciesauthor' => $row['SpeciesAuthor'],
           'population' => $row['Population'],
@@ -178,6 +72,7 @@ $geojson = array( 'type' => 'FeatureCollection', 'features' => array());
         ),
         'marker-color' => '#e74c3c',
         'marker-size' => 'small',
+        'marker-symbol' => 'garden'
       ),
       'geometry' => array(
         'type' => 'Point',
@@ -195,7 +90,11 @@ $geojson = array( 'type' => 'FeatureCollection', 'features' => array());
 ?>
 
 
-<div class="custom-popup" id="map"></div>
+<div class="custom-popup" id="map">
+
+</div>
+
+
 
 <div id="toolbar">
 <ul>
@@ -209,80 +108,109 @@ $geojson = array( 'type' => 'FeatureCollection', 'features' => array());
 
 <script>
 
-var 
-    click = document.getElementById('click'),
-    mousemove = document.getElementById('mousemove');
-
 //Get GeoJSON from PHP, store as js var
 var geoJson = <?php echo json_encode($geojson,JSON_NUMERIC_CHECK); ?>;
-console.log(geoJson);
 
-L.mapbox.accessToken = 'pk.eyJ1IjoiZnJhbmNlc2Nhc2FyZ2VudCIsImEiOiJvZmFuUzM0In0.-gsScOsPRxKs9E8qNy3qwg';
+var southWest = L.latLng(-84.938342,   -179.473040),
+    northEast = L.latLng(84.907230,  179.138422),
+    bounds = L.latLngBounds(southWest, northEast),
+    access = 'pk.eyJ1IjoiZnJhbmNlc2Nhc2FyZ2VudCIsImEiOiJvZmFuUzM0In0.-gsScOsPRxKs9E8qNy3qwg',
+    mapdes = 'francescasargent.ja3p4m1n';
 
-var map = L.mapbox.map('map', 'francescasargent.ja3p4m1n', {
-  tileLayer: {
-    continuousWorld: false,
-    noWrap: true
+
+
+function createMap(access, mapdes, geoJson, bounds, callback) {
+  L.mapbox.accessToken = access;
+  map = L.mapbox.map('map', mapdes, {
+      continuousWorld: false,
+      noWrap: true,
+      maxBounds: bounds,
+      maxZoom: 20,
+      minZoom: 4
+    
+  })
+  .setView([42, 7],3);
+
+  if (map.getZoom() <= 3){
+    map.fitBounds(bounds);
   }
-})
-    .setView([28.67, -4.66], 4).featureLayer.setGeoJSON(geoJson);
+
+  callback(geoJson, hoverPopUp);
+}
+
+function addFeatureLayer(geoJson, callback) {
+  featureLayer = L.mapbox.featureLayer()
+  .setGeoJSON(geoJson)
+  .addTo(map)
+
+  callback(map, clickEvents) 
+}
 
 
-map.eachLayer(function(layer) {
-  map.on('mouseover', function(e, layer) {
+function hoverPopUp(map, callback) {
+  isClicked = $(this).data('clicked');
+
+  featureLayer.on('mouseover', function(e, layer) {
     e.layer.openPopup();
-
   });
 
-  map.on('mouseout', function(e, layer) {
-	if (!isClicked) {
-	
-	} else {
-		e.layer.closePopup();
-	}
-    
+  featureLayer.on('mouseout', function(e, layer) {
+    if (!isClicked) {
+      return;
+    } else {
+      e.layer.closePopup();
+    }  
   });
-});
 
-// Listen for individual marker clicks.
-map.on('click',function(e) {
-	isClicked = $(this).data('clicked');
-    //e.layer.closePopup();
+  callback(map); 
+}
 
-	e.layer.openPopup();
+function clickEvents(map) {
+  featureLayer.on('click', function(e, layer) {
 
-    var feature = e.layer.feature;
-    var ob = feature.properties.database;
-
+    feature = e.layer.feature;
+    ob = feature.properties.database;
     
+    console.log(ob);
+    
+    e.layer.openPopup();
+    contentPopup(feature, ob);
+    
+    map.panTo(e.layer.getLatLng());
 
-    //print array in console.log for reference
-    for (var key in ob) {
-      if (ob.hasOwnProperty(key)) {
-        var object = key + " -> " + ob[key].toString();
-        console.log(object);
-      }
+  })
+}
+
+function contentPopup(feature, ob) {
+  
+  for (var key in ob) {
+    if (ob.hasOwnProperty(key)) {
+      var object = key + " -> " + ob[key].toString();
+      console.log(object);
+    } else {
+      return;
     }
+  }
 
-    var content = '<div>' + '<strong>' + 'Species Name: </strong>' + ob.title + '<br>'
-                          + '<strong>' + 'Population: </strong>' + ob.population + '<br>'  
-                          + '<sub>' + ob.journal + ob.isbn + '</sub><br>'  
-                          + '<strong>' + 'Growth Type: </strong>' + ob.growthtype + '<br>' 
-                          + '<strong>' + 'Plant Type: </strong>' + ob.planttype + '<br>' 
-                          + '<strong>' + 'Continent: </strong>' + ob.continent + '<br>'
-                          + '<strong>' + 'Matrix Composite: </strong>' + ob.matrixcomposite + '<br>' 
-                          + '<strong>' + 'Continent: </strong>' + ob.continent + '<br>' 
-                          + '<div class="graph"><a href= "graph/'+ ob.matrixnumber +'_' + ob.speciesauthor + '_dot.png" target="_blank"><img src="graph/'+ ob.matrixnumber +'_' + ob.speciesauthor +'_dot.png"></a></div>'
-
-
+  var content = '<div>' + '<strong>' + 'Species Name: </strong>' + ob.title + '<br>'
+    + '<strong>' + 'Population: </strong>' + ob.population + '<br>'  
+    + '<sub>' + ob.journal + ob.isbn + '</sub><br>'  
+    + '<strong>' + 'Growth Type: </strong>' + ob.growthtype + '<br>' 
+    + '<strong>' + 'Plant Type: </strong>' + ob.planttype + '<br>' 
+    + '<strong>' + 'Continent: </strong>' + ob.continent + '<br>'
+    + '<strong>' + 'Matrix Composite: </strong>' + ob.matrixcomposite + '<br>' 
+    + '<strong>' + 'Continent: </strong>' + ob.continent + '<br>' 
+    + '<div class="graph"><a href= "graph/'+ ob.matrixnumber +'_' + ob.speciesauthor + '_dot.png" target="_blank"><img src="graph/'+ ob.matrixnumber +'_' + ob.speciesauthor +'_dot.png"></a></div>'                          
     +'</div>';
-    info.innerHTML = content;
 
-});
+  info.innerHTML = content;
+}
+
+createMap(access, mapdes, geoJson, bounds, addFeatureLayer)
 
 
 // Clear the tooltip when map is clicked.
-map.on('move', empty);
+
 
 // Trigger empty contents when the script
 // has loaded on the page.
@@ -290,14 +218,13 @@ empty();
 
 function empty() {
   info.innerHTML = '';
-	
-  }
+}
 
 
 
-map.on('dblclick'), function(e) {
-	map.setView(e.latlng, map.getZoom() + 2).panTo(e.latlng);
-	map.panTo(e.latlng);
+featureLayer.on('dblclick'), function(e) {
+  map.setView(e.latlng, map.getZoom() + 2).panTo(e.latlng);
+  map.panTo(e.latlng);
 }
 
 
