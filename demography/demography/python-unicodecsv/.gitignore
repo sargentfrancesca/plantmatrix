@@ -1,0 +1,10 @@
+.DS_Store
+.tox
+unittest2*.egg
+*.pyc
+.directory
+venv/
+*.log
+build/
+dist/
+*.egg-info/
