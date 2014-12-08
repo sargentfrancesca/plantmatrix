@@ -1,0 +1,164 @@
+ERROR:root:Fail: 
+Traceback (most recent call last):
+  File "submit_plant.py", line 145, in importCSV
+    session.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 721, in commit
+    self.transaction.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 354, in commit
+    self._prepare_impl()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 334, in _prepare_impl
+    self.session.flush()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1818, in flush
+    self._flush(objects)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1936, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/langhelpers.py", line 58, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1900, in _flush
+    flush_context.execute()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 372, in execute
+    rec.execute(self)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 525, in execute
+    uow
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 64, in save_obj
+    table, insert)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 569, in _emit_insert_statements
+    execute(statement, params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 662, in execute
+    params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 761, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 874, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 1024, in _handle_dbapi_exception
+    exc_info
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/compat.py", line 196, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 867, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/default.py", line 324, in do_execute
+    cursor.execute(statement, parameters)
+ProgrammingError: (ProgrammingError) You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings. u'INSERT INTO plant (name, matrixnumber, matrix, dimension, matrixclassnumber, matrixclassorganised, matrixsplit, classnames, observation, matrixcomposite, matrixtreatment, matrixcaptivity, matrixstartyear, matrixstartseason, matrixstartmonth, matrixendyear, matrixendseason, matrixendmonth, studiedsex, population, latdeg, latmin, latsec, londeg, lonmin, lonsec, latitudedec, longitudedec, altitude, country, continent, criteriasize, criteriaontogeny, authors, journal, yearpublication, doiisbn, additionalsource, enteredby, entereddate, source, statusstudy, statusstudyref, statuselsewhere, statuselsewhereref, species_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' ('Hylocomium splendens', '336', '[0.444 0.25 0.177 0.126 0.091 0.085;0.166 0.185 0.167 0.133 0.09 0.047;0.151 0.218 0.238 0.228 0.177 0.095;0.105 0.166 0.189 0.221 0.201 0.155;0.106 0.139 0.182 0.219 0.314 0.301;0.027 0.042 0.047 0.072 0.127 0.318]', '6', '1', 'prop', 'Divisible', '"V0: Buried, fully shaded","V1: Low, 5-25% visible","V2: Intermediate, 25-75% visible","V3: High, 75-95% visible","V4: On top, 95-100% visible, but with contact with substratum or other bryophytes","V5: Emergent, 100% visible, no contact to substratum or other bryophytes"', "Geolocation / Altitudes of Populations from descriptor: 58\x8d 19' N 7\x8d 56' E; 58\x8d 57' N 8\x8d 49' E; 59\x8d 15' N 8\x8d 38' E; 59\x8d 49' N 11\x8d 02' E; 60\x8d 33' N 5\x8d 46' E; 62\x8d 01' N 12\x8d 10' E; 66\x8d 30' N 14\x8d 53' E / 150-275 m; 350-475 m; 475-550 m; 220-300 m; 220-350 m; 700-850 m; 225-325 m; n= number of parent segments in each category", 'Mean', 'Unmanipulated', 'W', '1992', 'NA', 'NA', '1997', 'NA', 'NA', 'A', 'PA; SO; GR; RA; OT; GU; GN', 'NC', 'NC', 'NC', 'NC', 'NC', 'NC', 'NA', 'NA', 'NC', 'NOR', 'Europe', 'Segment; number of growing points', 'Yes', 'Okland', 'Oikos', '2000', '10.1034/j.1600-0706.2000.880301.x', None, 'Gesa', '01.29.14', 'Paper', 'native', 'see authors', 'not introduced', 'NA', u'Hylocomium splendens')
+ERROR:root:Fail: 
+Traceback (most recent call last):
+  File "submit_plant.py", line 145, in importCSV
+    session.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 721, in commit
+    self.transaction.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 354, in commit
+    self._prepare_impl()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 334, in _prepare_impl
+    self.session.flush()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1818, in flush
+    self._flush(objects)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1936, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/langhelpers.py", line 58, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1900, in _flush
+    flush_context.execute()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 372, in execute
+    rec.execute(self)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 525, in execute
+    uow
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 64, in save_obj
+    table, insert)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 569, in _emit_insert_statements
+    execute(statement, params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 662, in execute
+    params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 761, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 874, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 1024, in _handle_dbapi_exception
+    exc_info
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/compat.py", line 196, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 867, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/default.py", line 324, in do_execute
+    cursor.execute(statement, parameters)
+ProgrammingError: (ProgrammingError) You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings. u'INSERT INTO plant (name, matrixnumber, matrix, dimension, matrixclassnumber, matrixclassorganised, matrixsplit, classnames, observation, matrixcomposite, matrixtreatment, matrixcaptivity, matrixstartyear, matrixstartseason, matrixstartmonth, matrixendyear, matrixendseason, matrixendmonth, studiedsex, population, latdeg, latmin, latsec, londeg, lonmin, lonsec, latitudedec, longitudedec, altitude, country, continent, criteriasize, criteriaontogeny, authors, journal, yearpublication, doiisbn, additionalsource, enteredby, entereddate, source, statusstudy, statusstudyref, statuselsewhere, statuselsewhereref, species_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' ('Hylocomium splendens', '336', '[0.444 0.25 0.177 0.126 0.091 0.085;0.166 0.185 0.167 0.133 0.09 0.047;0.151 0.218 0.238 0.228 0.177 0.095;0.105 0.166 0.189 0.221 0.201 0.155;0.106 0.139 0.182 0.219 0.314 0.301;0.027 0.042 0.047 0.072 0.127 0.318]', '6', '1', 'prop', 'Divisible', '"V0: Buried, fully shaded","V1: Low, 5-25% visible","V2: Intermediate, 25-75% visible","V3: High, 75-95% visible","V4: On top, 95-100% visible, but with contact with substratum or other bryophytes","V5: Emergent, 100% visible, no contact to substratum or other bryophytes"', "Geolocation / Altitudes of Populations from descriptor: 58\x8d 19' N 7\x8d 56' E; 58\x8d 57' N 8\x8d 49' E; 59\x8d 15' N 8\x8d 38' E; 59\x8d 49' N 11\x8d 02' E; 60\x8d 33' N 5\x8d 46' E; 62\x8d 01' N 12\x8d 10' E; 66\x8d 30' N 14\x8d 53' E / 150-275 m; 350-475 m; 475-550 m; 220-300 m; 220-350 m; 700-850 m; 225-325 m; n= number of parent segments in each category", 'Mean', 'Unmanipulated', 'W', '1992', 'NA', 'NA', '1997', 'NA', 'NA', 'A', 'PA; SO; GR; RA; OT; GU; GN', 'NC', 'NC', 'NC', 'NC', 'NC', 'NC', 'NA', 'NA', 'NC', 'NOR', 'Europe', 'Segment; number of growing points', 'Yes', 'Okland', 'Oikos', '2000', '10.1034/j.1600-0706.2000.880301.x', None, 'Gesa', '01.29.14', 'Paper', 'native', 'see authors', 'not introduced', 'NA', u'Hylocomium splendens')
+ERROR:root:Fail: 
+Traceback (most recent call last):
+  File "submit_plant.py", line 144, in importCSV
+    session.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 721, in commit
+    self.transaction.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 354, in commit
+    self._prepare_impl()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 334, in _prepare_impl
+    self.session.flush()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1818, in flush
+    self._flush(objects)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1936, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/langhelpers.py", line 58, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1900, in _flush
+    flush_context.execute()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 372, in execute
+    rec.execute(self)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 525, in execute
+    uow
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 64, in save_obj
+    table, insert)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 569, in _emit_insert_statements
+    execute(statement, params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 662, in execute
+    params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 761, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 874, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 1024, in _handle_dbapi_exception
+    exc_info
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/compat.py", line 196, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 867, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/default.py", line 324, in do_execute
+    cursor.execute(statement, parameters)
+ProgrammingError: (ProgrammingError) You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings. u'INSERT INTO plant (name, matrixnumber, matrix, dimension, matrixclassnumber, matrixclassorganised, matrixsplit, classnames, observation, matrixcomposite, matrixtreatment, matrixcaptivity, matrixstartyear, matrixstartseason, matrixstartmonth, matrixendyear, matrixendseason, matrixendmonth, studiedsex, population, latdeg, latmin, latsec, londeg, lonmin, lonsec, latitudedec, longitudedec, altitude, country, continent, criteriasize, criteriaontogeny, authors, journal, yearpublication, doiisbn, additionalsource, enteredby, entereddate, source, statusstudy, statusstudyref, statuselsewhere, statuselsewhereref, species_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' ('Hylocomium splendens', '336', '[0.444 0.25 0.177 0.126 0.091 0.085;0.166 0.185 0.167 0.133 0.09 0.047;0.151 0.218 0.238 0.228 0.177 0.095;0.105 0.166 0.189 0.221 0.201 0.155;0.106 0.139 0.182 0.219 0.314 0.301;0.027 0.042 0.047 0.072 0.127 0.318]', '6', '1', 'prop', 'Divisible', '"V0: Buried, fully shaded","V1: Low, 5-25% visible","V2: Intermediate, 25-75% visible","V3: High, 75-95% visible","V4: On top, 95-100% visible, but with contact with substratum or other bryophytes","V5: Emergent, 100% visible, no contact to substratum or other bryophytes"', "Geolocation / Altitudes of Populations from descriptor: 58\x8d 19' N 7\x8d 56' E; 58\x8d 57' N 8\x8d 49' E; 59\x8d 15' N 8\x8d 38' E; 59\x8d 49' N 11\x8d 02' E; 60\x8d 33' N 5\x8d 46' E; 62\x8d 01' N 12\x8d 10' E; 66\x8d 30' N 14\x8d 53' E / 150-275 m; 350-475 m; 475-550 m; 220-300 m; 220-350 m; 700-850 m; 225-325 m; n= number of parent segments in each category", 'Mean', 'Unmanipulated', 'W', '1992', 'NA', 'NA', '1997', 'NA', 'NA', 'A', 'PA; SO; GR; RA; OT; GU; GN', 'NC', 'NC', 'NC', 'NC', 'NC', 'NC', 'NA', 'NA', 'NC', 'NOR', 'Europe', 'Segment; number of growing points', 'Yes', 'Okland', 'Oikos', '2000', '10.1034/j.1600-0706.2000.880301.x', None, 'Gesa', '01.29.14', 'Paper', 'native', 'see authors', 'not introduced', 'NA', u'Hylocomium splendens')
+ERROR:root:Fail: 
+Traceback (most recent call last):
+  File "submit_plant.py", line 141, in importCSV
+    session.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 721, in commit
+    self.transaction.commit()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 354, in commit
+    self._prepare_impl()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 334, in _prepare_impl
+    self.session.flush()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1818, in flush
+    self._flush(objects)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1936, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/langhelpers.py", line 58, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1900, in _flush
+    flush_context.execute()
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 372, in execute
+    rec.execute(self)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/unitofwork.py", line 525, in execute
+    uow
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 64, in save_obj
+    table, insert)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/orm/persistence.py", line 569, in _emit_insert_statements
+    execute(statement, params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 662, in execute
+    params)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 761, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 874, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 1024, in _handle_dbapi_exception
+    exc_info
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/util/compat.py", line 196, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/base.py", line 867, in _execute_context
+    context)
+  File "/Users/francesca/sites/env/demography/lib/python2.7/site-packages/sqlalchemy/engine/default.py", line 324, in do_execute
+    cursor.execute(statement, parameters)
+ProgrammingError: (ProgrammingError) You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings. u'INSERT INTO plant (name, matrixnumber, matrix, dimension, matrixclassnumber, matrixclassorganised, matrixsplit, classnames, observation, matrixcomposite, matrixtreatment, matrixcaptivity, matrixstartyear, matrixstartseason, matrixstartmonth, matrixendyear, matrixendseason, matrixendmonth, studiedsex, population, latdeg, latmin, latsec, londeg, lonmin, lonsec, latitudedec, longitudedec, altitude, country, continent, criteriasize, criteriaontogeny, authors, journal, yearpublication, doiisbn, additionalsource, enteredby, entereddate, source, statusstudy, statusstudyref, statuselsewhere, statuselsewhereref, species_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' ('Hylocomium splendens', '336', '[0.444 0.25 0.177 0.126 0.091 0.085;0.166 0.185 0.167 0.133 0.09 0.047;0.151 0.218 0.238 0.228 0.177 0.095;0.105 0.166 0.189 0.221 0.201 0.155;0.106 0.139 0.182 0.219 0.314 0.301;0.027 0.042 0.047 0.072 0.127 0.318]', '6', '1', 'prop', 'Divisible', '"V0: Buried, fully shaded","V1: Low, 5-25% visible","V2: Intermediate, 25-75% visible","V3: High, 75-95% visible","V4: On top, 95-100% visible, but with contact with substratum or other bryophytes","V5: Emergent, 100% visible, no contact to substratum or other bryophytes"', "Geolocation / Altitudes of Populations from descriptor: 58\x8d 19' N 7\x8d 56' E; 58\x8d 57' N 8\x8d 49' E; 59\x8d 15' N 8\x8d 38' E; 59\x8d 49' N 11\x8d 02' E; 60\x8d 33' N 5\x8d 46' E; 62\x8d 01' N 12\x8d 10' E; 66\x8d 30' N 14\x8d 53' E / 150-275 m; 350-475 m; 475-550 m; 220-300 m; 220-350 m; 700-850 m; 225-325 m; n= number of parent segments in each category", 'Mean', 'Unmanipulated', 'W', '1992', 'NA', 'NA', '1997', 'NA', 'NA', 'A', 'PA; SO; GR; RA; OT; GU; GN', 'NC', 'NC', 'NC', 'NC', 'NC', 'NC', 'NA', 'NA', 'NC', 'NOR', 'Europe', 'Segment; number of growing points', 'Yes', 'Okland', 'Oikos', '2000', '10.1034/j.1600-0706.2000.880301.x', None, 'Gesa', '01.29.14', 'Paper', 'native', 'see authors', 'not introduced', 'NA', u'Hylocomium splendens')

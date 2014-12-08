@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Demography{% endblock %}
+{% block extrascripts %}
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
+<link rel="stylesheet" href="{{url_for('static', filename='css/styles.css', _external=True)}}" type="text/css"/>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+<link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+<link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' 
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script><body>
+{% endblock %}
+
+{% block content %}
+
+
+<div id="map"></div>
+
+<div class="info panel panel-default" id="info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Plant View</h3>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$( document ).ready(function() {
+  $.getJSON('{{ url_for(".geojson") }}', function(data) {
+    southWest = L.latLng(-84.938342,   -179.473040),
+                  northEast = L.latLng(84.907230,  179.138422),
+                  bounds = L.latLngBounds(southWest, northEast)
+
+
+
+
+    L.mapbox.accessToken = 'pk.eyJ1IjoiZnJhbmNlc2Nhc2FyZ2VudCIsImEiOiJvZmFuUzM0In0.-gsScOsPRxKs9E8qNy3qwg'
+
+    var baseLayer = L.mapbox.tileLayer('francescasargent.ja3p4m1n');
+
+    var markers = L.markerClusterGroup({
+                  polygonOptions: {
+                        fillColor: '#fff',
+                        color: '#fff',
+                        weight: 3,
+                        opacity: 1,
+                        fillOpacity: 0.5
+                      }
+    });
+
+    var map = L.map('map', {
+       continuousWorld: false,
+                    noWrap: true,
+                    maxZoom: 0,
+                    minZoom: 4
+
+      })
+
+    var featureLayer = L.mapbox.featureLayer();
+
+
+    var filter_invasive = document.getElementById('filter-invasive');
+    var filter_all = document.getElementById('filter-all');
+    var info = document.getElementById('info');
+    var geojson = L.geoJson(data, {
+      onEachFeature: function (feature, layer) {
+        
+        var composite = feature.properties.matrixcomposite;
+
+        if (composite == 'Mean') {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': '2ecc71'}));
+        } else if (composite == 'Individual') {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': 'e74c3c'}));
+        } else if (composite == 'Pooled') {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': 'f1c40f'}));
+        } else {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': 'ecf0f1'}));
+        }
+
+        layer.bindPopup('<b>#'+feature.properties.matrixnumber+' </b><em>'+feature.properties.name+'</em><br>'+feature.properties.population+'<p><a><span class="float focus glyphicon glyphicon-search" aria-hidden="true"></a></span></p>');
+
+      }
+    });
+
+    baseLayer.addTo(map);
+    featureLayer.addLayer(markers);
+    markers.addLayer(geojson);
+    map.fitBounds(markers.getBounds());
+    featureLayer.addTo(map);
+
+    featureLayer.on('click',function(e, map) {
+      var feature = e.layer.feature;
+      console.log(feature.properties.name);
+
+
+
+      $('.focus').click(function(e, map){
+        
+
+        $.ajax({
+            url: '{{ url_for(".speciesjson", name="'+feature.properties.name+'") }}'
+            }).done(function (data) {
+                var statusstudy = feature.properties.statusstudy;
+                var statuselsewhere = feature.properties.statuselsewhere;
+                    console.log(data)
+
+
+              function setContent(statusstudy, statuselsewhere) {
+                var content = '<div class="panel-heading"><strong>#'+feature.properties.matrixnumber+' </strong><em> '+feature.properties.name+'</em></div><ul class="list-group"><li class="list-group-item '+statusstudy+' '+statuselsewhere+'-else "><em>'+feature.properties.name+'</em> is '+ statusstudy +' in '+feature.properties.continent+', and '+ statuselsewhere +' elsewhere</li></ul>';
+
+                $('#info').html(content);
+              }
+
+
+              
+
+              setContent(statusstudy, statuselsewhere)
+
+              });
+                   
+        
+            });
+        });
+
+    
+    map.on('move', empty);
+
+    empty();
+
+    function empty() {
+      info.innerHTML = '';
+    }
+
+
+     
+    });
+
+
+  });
+
+
+
+  
+
+</script>
+{% endblock %}

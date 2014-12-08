@@ -1,0 +1,182 @@
+{% for s in species %}
+  {% for plant in s.plants %}
+    {{ plant.name }} , {{ plant.statusstudy }}<br>
+  {% endfor %}
+{% endfor %}
+
+$.ajax({
+    url: '{{ url_for(".geojson") }}'
+    }).done(function (data) {
+          var geoJSON = data,
+              southWest = L.latLng(-84.938342,   -179.473040),
+              northEast = L.latLng(84.907230,  179.138422),
+              bounds = L.latLngBounds(southWest, northEast),
+              access = 'pk.eyJ1IjoiZnJhbmNlc2Nhc2FyZ2VudCIsImEiOiJvZmFuUzM0In0.-gsScOsPRxKs9E8qNy3qwg',
+              mapdes = 'francescasargent.ja3p4m1n';
+
+          console.log(geoJSON)
+
+          L.mapbox.accessToken = 'pk.eyJ1IjoiZnJhbmNlc2Nhc2FyZ2VudCIsImEiOiJvZmFuUzM0In0.-gsScOsPRxKs9E8qNy3qwg'
+
+
+          function createMap(access, mapdes, bounds) {
+            L.mapbox.accessToken = access;
+            map = L.mapbox.map('map', mapdes, {
+                continuousWorld: false,
+                noWrap: true,
+                maxBounds: bounds,
+                maxZoom: 20,
+                minZoom: 4
+              
+            })
+            .setView([42, 7],3);
+
+            if (map.getZoom() <= 3){
+              map.fitBounds(bounds);
+            }
+
+            addFeatureLayer(geoJSON);
+            hoverPopUp(map)
+
+          }
+
+          function addFeatureLayer(geoJSON) {
+            featureLayer = L.mapbox.featureLayer()
+            .setGeoJSON(geoJSON)
+            .addTo(map)
+          }
+
+          L.mapbox.featureLayer().on('ready', function(e) {
+              // The clusterGroup gets each marker in the group added to it
+              // once loaded, and then is added to the map
+              var clusterGroup = new L.MarkerClusterGroup();
+              e.target.eachLayer(function(layer) {
+                  clusterGroup.addLayer(layer);
+              });
+              map.addLayer(clusterGroup);
+          });
+
+          createMap(access, mapdes, bounds);
+
+          function hoverPopUp(map) {
+          isClicked = $(this).data('clicked');
+
+          featureLayer.on('mouseover', function(e, layer) {
+            e.layer.openPopup();
+          });
+
+          featureLayer.on('mouseout', function(e, layer) {
+            if (!isClicked) {
+              return;
+            } else {
+              e.layer.closePopup();
+            }  
+          });
+
+          clickEvents(map); 
+        }
+
+        function clickEvents(map) {
+          featureLayer.on('click', function(e, layer) {
+
+            feature = e.layer.feature;
+            ob = feature.properties;
+            
+            console.log(ob);
+            
+            e.layer.openPopup();
+            contentPopup(feature, ob);
+            
+            map.panTo(e.layer.getLatLng());
+
+          })
+        }
+
+        function contentPopup(feature) {
+
+        var content = '<div>' + 'Hello' +'</div>';
+
+       
+
+        info.innerHTML = content;
+
+        }
+
+        empty();
+
+      function empty() {
+        info.innerHTML = '';
+      }
+
+
+
+      featureLayer.on('dblclick'), function(e) {
+        map.setView(e.latlng, map.getZoom() + 1).panTo(e.latlng);
+        map.panTo(e.latlng);
+      }
+
+
+
+    });
+});
+
+
+
+/////
+var info = document.getElementById('info');
+    var geojson = L.geoJson(data, {
+      onEachFeature: function (feature, layer) {
+        
+        var composite = feature.properties.matrixcomposite;
+
+        if (composite == 'Mean') {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': '2ecc71'}));
+        } else if (composite == 'Individual') {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': 'e74c3c'}));
+        } else if (composite == 'Pooled') {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': 'f1c40f'}));
+        } else {
+          layer.setIcon(L.mapbox.marker.icon({'marker-color': 'ecf0f1'}));
+        }
+
+        layer.bindPopup('<b>#'+feature.properties.matrixnumber+' </b><em>'+feature.properties.name+'</em><br>'+feature.properties.population+'<br><a><span class="float focus glyphicon glyphicon-search" aria-hidden="true"></a><br></span>');
+
+        layer.getZoom(4);
+
+      }
+    });
+
+    baseLayer.addTo(map);
+    featureLayer.addLayer(markers);
+    markers.addLayer(geojson);
+    map.fitBounds(markers.getBounds());
+    featureLayer.addTo(map);
+
+    featureLayer.on('click',function(e, map) {
+      map.setView(e.latlng, map.getZoom() + 2).panTo(e.latlng);
+      var feature = e.layer.feature;
+      console.log(feature.properties.name);
+
+      $('.focus').click(function(e, map){
+        var content = '<div class="panel-content"><strong>' + feature.properties.name + '</strong>' +
+                      '<p>' + feature.properties.matrixnumber + '</p></div>';
+
+        $('#info').html(content);
+
+
+      });    
+    });
+
+    markers.on('move', empty);
+
+    empty();
+
+    function empty() {
+      $('#info').html('');
+    }
+
+
+  });
+
+
+});
